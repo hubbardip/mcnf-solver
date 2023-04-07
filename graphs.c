@@ -4,6 +4,7 @@ graph *g_create() {
   graph *g = malloc(sizeof(graph));
   g->nodes = v_create();
   g->arcs = v_create();
+  g->nnodes = g->narcs = 0;
 
   return g;
 }
@@ -13,6 +14,7 @@ void g_add_node(graph *g, double supply) {
   n->supply = supply;
   n->out_arcs = v_create();
   n->in_arcs = v_create();
+  n->idx = g->nnodes++;
   v_append(g->nodes, n);
 }
 
@@ -27,12 +29,18 @@ void g_add_arc(graph *g, int start, int end, double cost, double lb, double ub) 
   a->ub = ub;
   
   node *s = v_get(g->nodes, start);
-  node *e = v_get(g->nodes, end);
-  a->start = s;
-  a->end = e;
+  node *d = v_get(g->nodes, end);
+  a->src = s;
+  a->dst = d;
+  a->srci = s->idx;
+  a->dsti = d->idx;
+
+  a->idx = g->narcs++;
+
+  a->x = 0;
 
   v_append(s->out_arcs, a);
-  v_append(e->in_arcs, a);
+  v_append(d->in_arcs, a);
 
   v_append(g->arcs, a);
 }

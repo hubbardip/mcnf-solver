@@ -1,2 +1,9 @@
 # compiled binary
 graph
+
+# dot files and images
+*.dot
+*.png
+
+# input files
+*.min
