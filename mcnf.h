@@ -37,5 +37,20 @@ graph *read_dimacs(char *path);
 /* Write a graph in the graphviz dot format */
 void write_dot(graph *g, char *path);
 
+/* Returns 1 iff flow on graph is feasible */
+int check_flow(graph *g);
+
+/* Returns 1 iff flow on graph satisfies capacity constraints */
+int check_capacity(graph *g);
+
+/* Returns 1 iff flow on graph satisfies mass-balance constraints */
+int check_mass_balance(graph *g);
+
+/* Transform network to set all lower bounds to 0 */
+void remove_lower_bounds(graph *g);
+
+/* Returns 1 iff all lower bounds are 0 */
+int check_lower_bounds(graph *g);
+
 /* Create a residual network with respect to a given flow */
 graph *residual(graph *g);

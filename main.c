@@ -17,7 +17,12 @@ int main(int argc, char **argv) {
 
   g_add_arc(g, n-1, 0, 1, 0, INFINITY);
 
+  ((arc *) v_get(g->arcs, 0))->x = 1;
+
   write_dot(g, "g.dot");
+
+  graph *res = residual(g);
+  write_dot(res, "res.dot");
     
   g_free(g);
 
