@@ -94,6 +94,14 @@ void g_remove_node(graph *g, int idx) {
   g->nodes->count--;
 }
 
+node *g_get_node(graph *g, int idx) {
+  return v_get(g->nodes, idx);
+}
+
+arc *g_get_arc(graph *g, int idx) {
+  return v_get(g->arcs, idx);
+}
+
 void g_free(graph *g) {
   for(int i = 0; i < g->nodes->count; i++) {
     v_destroy(((node *) v_get(g->nodes, i))->out_arcs);

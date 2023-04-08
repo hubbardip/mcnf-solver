@@ -3,11 +3,16 @@
 #include <math.h>
 #include "vector.h"
 
+typedef struct node node;
+typedef struct arc arc;
+
 typedef struct node {
   double supply;
   vector *out_arcs, *in_arcs;
   int idx;
-  double pi, e;
+  double pi, e, d; //node potential, excess, distance along path
+  arc *prev; //arc connecting to previous node in path
+  int marked; //1 if already marked by dijkstra's
 } node;
 
 typedef struct arc {
@@ -38,6 +43,10 @@ void g_remove_arc(graph *g, int idx);
 
 /* Remove a node and all incident arcs */
 void g_remove_node(graph *g, int idx);
+
+node *g_get_node(graph *g, int idx);
+
+arc *g_get_arc(graph *g, int idx);
 
 /* Destroy graph */
 void g_free(graph *g);
@@ -71,3 +80,7 @@ void remove_interchange(graph *g);
 
 /* Create a residual network with respect to a given flow */
 graph *residual(graph *g);
+
+/* Calculate shortest path s -> t wrt reduced costs
+ * Returns a vector of arcs in the path */
+vector *shortest_path(graph *g, int s, int t);
