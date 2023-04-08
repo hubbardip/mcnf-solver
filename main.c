@@ -3,8 +3,6 @@
 int main(int argc, char **argv) {
 
   //graph *g = read_dimacs("sample.min");
-
-
   graph *g = g_create();
 
   //generate n-node cycle:
@@ -21,9 +19,12 @@ int main(int argc, char **argv) {
 
   write_dot(g, "g.dot");
 
-  graph *res = residual(g);
-  write_dot(res, "res.dot");
-    
+  add_interchange(g);
+  write_dot(g, "inter.dot");
+
+  remove_interchange(g);
+  write_dot(g, "no_inter.dot");
+  
   g_free(g);
 
   return 0;

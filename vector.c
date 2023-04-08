@@ -35,6 +35,13 @@ void v_set(vector *v, int i, void *val) {
     v->items[i] = val;
 }
 
+void v_remove(vector *v, int i) {
+  if(i < 0 || i >= v->count) return;
+  for(int j = i; j < v->count-1; j++)
+    v->items[j] = v->items[j+1];
+  v->count--;
+}
+
 void v_free(vector *v) {
   free(v->items);
 }
