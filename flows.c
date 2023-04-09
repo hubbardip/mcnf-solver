@@ -7,8 +7,10 @@ int check_flow(graph *g) {
 int check_capacity(graph *g) {
   for(int j = 0; j < g->arcs->count; j++) {
     arc *a = v_get(g->arcs, j);
-    if(a->x > a->ub || a->x < a->lb)
+    if(a->x > a->ub || a->x < a->lb) {
+      printf("Arc %d has flow = %g, ub = %g, lb = %g\n", j, a->x, a->ub, a->lb);
       return 0;
+    }
   }
   return 1;
 }

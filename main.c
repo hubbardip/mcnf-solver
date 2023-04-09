@@ -17,22 +17,35 @@ int main(int argc, char **argv) {
 
   ((arc *) v_get(g->arcs, 0))->x = 1;*/
 
+  remove_lower_bounds(g);
+  //printf("LB: %d\n", check_lower_bounds(g));
+
   write_dot(g, "g.dot");
 
   add_interchange(g);
-  write_dot(g, "inter.dot");
-  vector *path = shortest_path(g, 0, 8);
-  printf("Path:\n");
-  for(int j = 0; j < path->count; j++) {
-    arc *a = v_get(path, j);
-    printf("%d -> %d\n", a->src->idx, a->dst->idx);
-  }
-  
-  v_destroy(path);
 
-  remove_interchange(g);
-  //write_dot(g, "no_inter.dot");
-  
+  ssp(g);
+
+  if(check_interchange(g))
+    printf("Problem infeasible; interchange vertex used\n");
+  else {
+    remove_interchange(g);
+    printf("\n");
+    if(check_comp_slackness(g))
+      printf("Optimal solution found\n");
+    else
+      printf("No optimal solution\n");
+    printf("Total cost = %g. Result:\n", total_cost(g));
+    for(int i = 0; i < g->nodes->count; i++) {
+      node *n = g_get_node(g, i);
+      printf("Node %d: pi = %g\n", i, n->pi);
+      for(int j = 0; j < n->out_arcs->count; j++) {
+	arc *a = v_get(n->out_arcs, j);
+	printf("  %d -> %d, flow = %g\n", a->src->idx, a->dst->idx, a->x);
+      }
+    }
+  }
+    
   g_free(g);
 
   return 0;

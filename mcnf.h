@@ -13,6 +13,7 @@ typedef struct node {
   double pi, e, d; //node potential, excess, distance along path
   arc *prev; //arc connecting to previous node in path
   int marked; //1 if already marked by dijkstra's
+  node *orig; //for resnets, pointer to the node in the original
 } node;
 
 typedef struct arc {
@@ -21,6 +22,8 @@ typedef struct arc {
   int srci, dsti;
   int idx;
   double x;
+  arc *orig; //for resnets, pointer to the arc in the original
+  int reverse; //equals 1 if the arc is the reverse of the original
 } arc;
 
 typedef struct graph {
@@ -78,9 +81,25 @@ void add_interchange(graph *g);
 /* Removes the interchange nodes and arcs */
 void remove_interchange(graph *g);
 
+/* Returns 1 if interchange arc was used; i.e. problem infeasible */
+int check_interchange(graph *g);
+
 /* Create a residual network with respect to a given flow */
 graph *residual(graph *g);
+
+/* Send delta units of flow on arc a in residual network,
+ * adjusting arcs as needed */
+void res_send_flow(graph *res, arc *a, double delta);
 
 /* Calculate shortest path s -> t wrt reduced costs
  * Returns a vector of arcs in the path */
 vector *shortest_path(graph *g, int s, int t);
+
+/* Run SSP to solve MCNF, storing results in pi and x */
+void ssp(graph *g);
+
+/* Return total cost of flow on g */
+double total_cost(graph *g);
+
+/* Return 1 if solution is optimal according to CS */
+int check_comp_slackness(graph *g);

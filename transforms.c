@@ -51,3 +51,9 @@ void remove_interchange(graph *g) {
   g_remove_node(g, src_i);
   g_remove_node(g, (dst_i > src_i) ? dst_i - 1 : dst_i); //index will have been reduced by 1
 }
+
+int check_interchange(graph *g) {
+  if(g->interchange_arc == -1) return 0; //interchange DNE
+  arc *a = v_get(g->arcs, g->interchange_arc);
+  return a->x != 0;
+}
